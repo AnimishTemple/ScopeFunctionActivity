@@ -15,7 +15,14 @@ class MainActivity : AppCompatActivity() {
 
         // You can test your helper functions by  calling them from onCreate() and
         // printing their output to the Log, which is visible in the LogCat:
-        // eg. Log.d("function output", getTestDataArray().toString())
+        Log.d("getTestDataArray function output!", getTestDataArray().toString())
+
+        val sampleListFalseReturn = listOf(10.0, 15.0, 20.0, 25.0, 35.0)
+        val sampleListTrueReturn = listOf(10.0, 15.0, 21.0, 25.0, 30.0)
+
+        Log.d("averageLessThanMedian function output!!", averageLessThanMedian(sampleListFalseReturn).toString())
+        Log.d("averageLessThanMedian function output!!", averageLessThanMedian(sampleListTrueReturn).toString())
+
 
     }
 
@@ -27,14 +34,16 @@ class MainActivity : AppCompatActivity() {
     // Look at the final/return value and build the function "working backwards"
 
     // Return a list of random, sorted integers
-    private fun getTestDataArray() : List<Int> {
+    /*private fun getTestDataArray() : List<Int> {
         val testArray = MutableList(10){ Random.nextInt()}
         testArray.sort()
         return testArray
-    }
+    }*/
+
+    private fun getTestDataArray() = MutableList(10) { Random.nextInt() }.apply{ sort() }
 
     // Return true if average value in list is greater than median value, false otherwise
-    private fun averageLessThanMedian(listOfNumbers: List<Double>): Boolean {
+    /*private fun averageLessThanMedian(listOfNumbers: List<Double>): Boolean {
         val avg = listOfNumbers.average()
         val sortedList = listOfNumbers.sorted()
         val median = if (sortedList.size % 2 == 0)
@@ -43,6 +52,19 @@ class MainActivity : AppCompatActivity() {
             sortedList[sortedList.size / 2]
 
         return avg < median
+    }*/
+
+    private fun averageLessThanMedian(listOfNumbers: List<Double>) = listOfNumbers.run {
+        average().let { avg ->
+            sorted().let { sortedList ->
+                val median = if (sortedList.size % 2 == 0) {
+                    (sortedList[sortedList.size / 2] + sortedList[(sortedList.size - 1) / 2]) / 2
+                } else {
+                    sortedList[sortedList.size / 2]
+                }
+                avg < median
+            }
+        }
     }
 
     // Create a view from an item in a collection, but recycle if possible (similar to an AdapterView's adapter)
